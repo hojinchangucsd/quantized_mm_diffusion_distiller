@@ -46,7 +46,7 @@ def default_iter_callback(N, loss, last=False):
 def make_visualization_(diffusion, device, image_size, need_tqdm=False, eta=0, clip_value=1.2):
     extra_args = {}
     noise = torch.randn(image_size, device=device)
-    imgs = p_sample_loop(diffusion, noise, extra_args, "cuda", samples_to_capture=5, need_tqdm=need_tqdm, eta=eta, clip_value=clip_value)
+    imgs = p_sample_loop(diffusion, noise, extra_args, device, samples_to_capture=5, need_tqdm=need_tqdm, eta=eta, clip_value=clip_value)
     images_ = []
     for images in imgs:
         images = images.split(1, dim=0)

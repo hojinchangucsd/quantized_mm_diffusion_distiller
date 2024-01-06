@@ -192,10 +192,10 @@ class TimeEmbedding(nn.Module):
         self.register_buffer("inv_freq", inv_freq)
 
     def forward(self, input):
-        shape = input.shape
+        shape = input.shape + (self.dim,)
         sinusoid_in = torch.ger(input.view(-1).float(), self.inv_freq)
         pos_emb = torch.cat([sinusoid_in.sin(), sinusoid_in.cos()], dim=-1)
-        pos_emb = pos_emb.view(*shape, self.dim)
+        pos_emb = pos_emb.view(shape)
 
         return pos_emb
 

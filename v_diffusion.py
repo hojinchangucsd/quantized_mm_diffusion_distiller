@@ -73,7 +73,7 @@ class GaussianDiffusion:
             self.p_sample = self.p_sample_clipped
 
     def inference(self, x, t, extra_args):
-        return self.net_(x, t * self.time_scale, **extra_args)
+        return self.net_(x, t * self.time_scale)
 
     def p_loss(self, x_0, t, extra_args, noise=None):
         if noise is None:
