@@ -1,10 +1,19 @@
 import torch
 import cv2
 import numpy as np
+import argparse
 from copy import deepcopy
 from celeba_u import make_model as celeba_u
 from v_diffusion import GaussianDiffusion, make_beta_schedule
 from train_utils import p_sample_loop
+
+def make_sampling_argparser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--start_index", help="Index image generation should start from", type=int, required=True)
+    parser.add_argument("--num_samples", help="Number of images to generate", type=int, required=True)
+    parser.add_argument("--out_folder", help="Path to put images", type=str, required=True)
+    parser.add_argument("--device", help="Device to run sampling on", type=str, required=True)
+    return parser
 
 def get_samples(num_samples, image_size, device, diffusion): 
     noise = torch.randn(image_size, device=device)

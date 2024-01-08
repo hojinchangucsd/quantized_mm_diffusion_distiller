@@ -1,0 +1,3 @@
+celeba_u_float_model & celeba_hq_256_dataset : 40.91
+celeba_u_quant_model & celeba_hq_256_dataset : 
+celeba_u_quant_model & celeba_u_float_model : 

@@ -1,5 +1,9 @@
 import torch
+import os
 from q_helpers import *
+
+parser = make_sampling_argparser()
+args = parser.parse_args()
 
 device = "cpu"
 FM_PATH = f"./checkpoints/celeba/base_6/checkpoint.pt"
@@ -11,5 +15,9 @@ quantized_model = torch.jit.load(QM_PATH)
 
 quantized_diffusion = get_diffusion(quantized_model, n_timesteps, time_scale, device)
 
-imgs = get_samples(n_timesteps, img_size, device, quantized_diffusion)
-write_imgs('./images/quantized_out.png', imgs)
+start = args.start_index
+end = start + args.num_samples
+for i in range(start,end): 
+    img = get_samples(1, img_size, device, quantized_diffusion)
+    img_path = os.path.join(args.out_folder, f'{i}.jpg')
+    write_imgs(img_path, img)
