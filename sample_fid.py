@@ -15,5 +15,6 @@ start = args.start_index
 end = start + args.num_samples
 for i in range(start,end): 
     img = get_samples(1, img_size, device, float_diffusion)
+    os.makedirs(args.out_folder, exist_ok=True)
     img_path = os.path.join(args.out_folder, f'{i}.jpg')
     write_imgs(img_path, img)

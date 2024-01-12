@@ -131,3 +131,5 @@ dmypy.json
 /checkpoints/**/*
 !/checkpoints/readme.txt
 .idea/
+
+/.vscode/

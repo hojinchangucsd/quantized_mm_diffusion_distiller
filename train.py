@@ -14,6 +14,7 @@ def make_argument_parser():
     parser.add_argument("--dname", help="Distillation name. Data will be saved to ./checkpoints/<name>/<dname>/.", type=str, required=True)
     parser.add_argument("--checkpoint_to_continue", help="Path to checkpoint.", type=str, default="")
     parser.add_argument("--num_timesteps", help="Num diffusion steps.", type=int, default=1024)
+    parser.add_argument("--time_scale", type=int, default=1)
     parser.add_argument("--num_iters", help="Num iterations.", type=int, default=100000)
     parser.add_argument("--batch_size", help="Batch size.", type=int, default=1)
     parser.add_argument("--lr", help="Learning rate.", type=float, default=5e-5)
@@ -48,12 +49,12 @@ def train_model(args, make_model, make_dataset):
     if not os.path.exists(checkpoints_dir):
         os.makedirs(checkpoints_dir)
 
-    def make_sheduler():
+    def make_scheduler():
         M = importlib.import_module("train_utils")
         D = getattr(M, args.scheduler)
         return D()
 
-    scheduler = make_sheduler()
+    scheduler = make_scheduler()
 
     def make_diffusion(model, n_timestep, time_scale, device):
         betas = make_beta_schedule("cosine", cosine_s=8e-3, n_timestep=n_timestep).to(device)
@@ -76,8 +77,8 @@ def train_model(args, make_model, make_dataset):
 
     tensorboard = SummaryWriter(os.path.join(checkpoints_dir, "tensorboard"))
 
-    teacher_diffusion = make_diffusion(teacher, args.num_timesteps, 1, device)
-    teacher_ema_diffusion = make_diffusion(teacher, args.num_timesteps, 1, device)
+    teacher_diffusion = make_diffusion(teacher, args.num_timesteps, args.time_scale, device)
+    teacher_ema_diffusion = make_diffusion(teacher, args.num_timesteps, args.time_scale, device)
 
     image_size = teacher.image_size
 
@@ -85,6 +86,7 @@ def train_model(args, make_model, make_dataset):
     diffusion_train = DiffusionTrain(scheduler)
     diffusion_train.train(train_loader, teacher_diffusion, teacher_ema, args.lr, device, make_extra_args=make_condition, on_iter=on_iter)
     print("Finished.")
+    return teacher_diffusion.net_
 
 if __name__ == "__main__":
     parser = make_argument_parser()

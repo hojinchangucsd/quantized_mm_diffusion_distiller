@@ -135,7 +135,7 @@ class DiffusionTrain:
             loss = diffusion.p_loss(img, time, extra_args)
             L_tot += loss.item()
             N += 1
-            pbar.set_description(f"Loss: {L_tot / N}")
+            pbar.set_description(f"Loss: {L_tot / N:.5f}")
             loss.backward()
             nn.utils.clip_grad_norm_(diffusion.net_.parameters(), 1)
             scheduler.step()
