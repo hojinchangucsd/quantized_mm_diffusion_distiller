@@ -17,7 +17,7 @@ quantized_diffusion = get_diffusion(quantized_model, n_timesteps, time_scale, de
 start = args.start_index
 end = start + args.num_samples
 for i in range(start,end): 
-    img = get_samples(8, img_size, device, quantized_diffusion)
+    img = get_samples(1, img_size, device, quantized_diffusion)
     os.makedirs(args.out_folder, exist_ok=True)
     img_path = os.path.join(args.out_folder, f'{i}.jpg')
     write_imgs(img_path, img)

@@ -34,16 +34,18 @@ example_inputs = (torch.randn(img_size, device=device),
 
 if QAT: 
     float_model = float_model.train()
+
+    num_iters = 15000
     
     train_args = pd_train.make_argument_parser().parse_args([
         "--module", "celeba_u",
         "--name", "celeba",
-        "--dname", "_500iter__qat_8_step__", 
+        "--dname", f"__{num_iters}iter_qat_8_step__", 
         "--num_timesteps", str(n_timesteps),
         "--time_scale", str(time_scale),
         "--batch_size", str(batch_size),
         "--num_workers", "4",
-        "--num_iters", "15000"
+        "--num_iters", str(num_iters)
     ])
 
     prepared_model = prepare_qat_fx(float_model, qconfig_mapping, 

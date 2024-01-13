@@ -5,7 +5,7 @@ nohup \
     python ./q_sample_fid.py \
     --start_index=0  \
     --num_samples=30000 \
-    --out_folder=./data/celeba-u_quant-model-out \
+    --out_folder=./data/celeba-u_qat-quant-model-out \
     --device=cpu \
         > /dev/null &
 
