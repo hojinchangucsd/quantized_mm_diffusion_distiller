@@ -1,0 +1,14 @@
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/overrides.py:110: UserWarning: 'has_cuda' is deprecated, please use 'torch.backends.cuda.is_built()'
+  torch.has_cuda,
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/overrides.py:111: UserWarning: 'has_cudnn' is deprecated, please use 'torch.backends.cudnn.is_available()'
+  torch.has_cudnn,
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/overrides.py:117: UserWarning: 'has_mps' is deprecated, please use 'torch.backends.mps.is_built()'
+  torch.has_mps,
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/overrides.py:118: UserWarning: 'has_mkldnn' is deprecated, please use 'torch.backends.mkldnn.is_available()'
+  torch.has_mkldnn,
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/ao/quantization/observer.py:214: UserWarning: Please use quant_min and quant_max to specify the range for observers.                     reduce_range will be deprecated in a future release of PyTorch.
+  warnings.warn(
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/ao/quantization/fake_quantize.py:343: UserWarning: _aminmax is deprecated as of PyTorch 1.11 and will be removed in a future release. Use aminmax instead. This warning will only appear once per process. (Triggered internally at ../aten/src/ATen/native/ReduceAllOps.cpp:72.)
+  return torch.fused_moving_avg_obs_fake_quant(
+/home/mmorafah@AD.UCSD.EDU/miniforge3/envs/prog_dist/lib/python3.9/site-packages/torch/ao/quantization/fake_quantize.py:343: UserWarning: _aminmax is deprecated as of PyTorch 1.11 and will be removed in a future release. Use aminmax instead. This warning will only appear once per process. (Triggered internally at ../aten/src/ATen/native/TensorCompare.cpp:677.)
+  return torch.fused_moving_avg_obs_fake_quant(
