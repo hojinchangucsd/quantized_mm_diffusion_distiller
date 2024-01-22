@@ -69,6 +69,7 @@ class resnet18_wrapper(object):
         return losses
 
     def get_acc(self, device): 
+        self.model = self.model.eval().to(device)
         num_correct = 0
         with torch.no_grad(): 
             for inputs, targets in self.test_dl: 
