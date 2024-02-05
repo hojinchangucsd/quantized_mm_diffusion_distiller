@@ -9,7 +9,7 @@ device = "cpu"
 FM_PATH = f"./checkpoints/celeba/base_6/checkpoint.pt"
 _, img_size, n_timesteps, time_scale = \
     load_float_ckpt(FM_PATH, batch_size=1, device=device)
-qm_path = f"./checkpoints/quantized/aware_fx_8-step_celeba_u.p"
+qm_path = f"./checkpoints/quantized/int8_aware_8-step_celeba_u.p"
 quantized_model = torch.jit.load(qm_path)
 
 quantized_diffusion = get_diffusion(quantized_model, n_timesteps, time_scale, device)

@@ -93,7 +93,7 @@ class Downsample(nn.Sequential):
 
 class ResBlock(nn.Module):
     def __init__(
-            self, in_channel, out_channel, time_dim, use_affine_time=False, dropout=0, group_norm=32,
+            self, in_channel, out_channel, time_dim, use_affine_time=False, dropout=0.0, group_norm=32,
     ):
         super().__init__()
 
@@ -273,7 +273,7 @@ class UNet(nn.Module):
             attn_strides: List[StrictInt],
             attn_heads: StrictInt = 1,
             use_affine_time: StrictBool = False,
-            dropout: StrictFloat = 0,
+            dropout: StrictFloat = 0.0,
             fold: StrictInt = 1,
     ):
         super().__init__()

@@ -82,9 +82,11 @@ def train_model(args, make_model, make_dataset):
 
     image_size = teacher.image_size
 
-    on_iter = make_iter_callback(teacher_ema_diffusion, device, checkpoints_dir, image_size, tensorboard, args.log_interval, args.ckpt_interval, False)
+    on_iter = make_iter_callback(teacher_ema_diffusion, device, checkpoints_dir, image_size, 
+                                 tensorboard, args.log_interval, args.ckpt_interval, False)
     diffusion_train = DiffusionTrain(scheduler)
-    diffusion_train.train(train_loader, teacher_diffusion, teacher_ema, args.lr, device, make_extra_args=make_condition, on_iter=on_iter)
+    diffusion_train.train(train_loader, teacher_diffusion, teacher_ema, args.lr, device, 
+                          make_extra_args=make_condition, on_iter=on_iter)
     print("Finished.")
     return teacher_diffusion.net_
 
