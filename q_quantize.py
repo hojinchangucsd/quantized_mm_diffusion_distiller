@@ -19,9 +19,16 @@ batch_size = 1
 lr = 1e-5
 QAT = True
 HALF = False # True for float16. False for int8
+train_str = "aware" if QAT else "post"
+half_str = "float16" if HALF else "int8"
 
 float_model, img_size, n_timesteps, time_scale \
     = load_float_ckpt(CKPT_PATH, batch_size, device)
+
+pt=0
+for p in float_model.parameters(): 
+    pt+=p.numel() if p.requires_grad else 0
+print(f'Parameter count: {pt}')
 
 qconfig = get_default_qconfig(backend) if not QAT else get_default_qat_qconfig(backend)
 torch.backends.quantized.engine = backend
@@ -42,7 +49,7 @@ if QAT:
     train_args = q_train.make_argument_parser().parse_args([
         "--module", "celeba_u",
         "--name", "celeba",
-        "--dname", f"{num_iters}iter_qat_8_step", 
+        "--dname", f"{half_str}_{num_iters}iter_qat_8_step", 
         "--teacher_ckpt_path", f"./checkpoints/celeba/base_6/checkpoint.pt",
         "--num_timesteps", str(n_timesteps),
         "--time_scale", str(time_scale),
@@ -59,7 +66,14 @@ if QAT:
         model.image_size = [1, 3, 256, 256]
         return model
     
-    prepared_model = q_train.train_model(train_args, make_qp_model, 
+    def make_half_model(): 
+        model = float_model.half()
+        model.image_size = [1, 3, 256, 256]
+        return model
+
+    make_student_model = make_half_model if HALF else make_qp_model
+    
+    prepared_model = q_train.train_model(train_args, make_student_model, 
                                          make_celeba_u, cu_make_dataset, device)
 
 else: 
@@ -77,12 +91,11 @@ else:
 
     calibrate()
 
-device = "cpu" if not HALF else device
-prepared_model.eval().to(device)
-quantized_model = convert_fx(prepared_model)
-quantized_model.to(device)
-train_str = "aware" if QAT else "post"
-half_str = "float16" if HALF else "int8"
+if not HALF: 
+    device = "cpu"
+    prepared_model.eval().to(device)
+    quantized_model = convert_fx(prepared_model)
+    quantized_model.to(device)
 
-torch.jit.save(torch.jit.script(quantized_model,example_inputs=example_inputs), 
-            f"./checkpoints/quantized/{half_str}_{train_str}_{n_timesteps}-step_celeba_u.p")
+    torch.jit.save(torch.jit.script(quantized_model,example_inputs=example_inputs), 
+                f"./checkpoints/quantized/{half_str}_{train_str}_{n_timesteps}-step_celeba_u.p")
